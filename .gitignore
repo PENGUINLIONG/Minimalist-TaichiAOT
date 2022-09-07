@@ -1,0 +1,12 @@
+# You should generate AOT module yourself.
+module/*
+!module/.gitignore
+
+.vs
+.idea
+.vscode
+tmp
+out
+build
+bin
+*.log
