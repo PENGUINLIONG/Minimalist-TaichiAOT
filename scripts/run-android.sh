@@ -4,6 +4,7 @@ cmake .. \
     -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake" \
     -DANDROID_PLATFORM=android-26 \
     -DANDROID_ABI="arm64-v8a"
+cmake --build .
 popd
 
 adb shell mkdir /data/local/tmp/taichi-aot/
