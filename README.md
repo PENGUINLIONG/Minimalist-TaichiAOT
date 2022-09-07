@@ -32,3 +32,12 @@ cd build
 cmake ..
 cmake --build .
 ```
+
+If you are using Android NDK, instead of `cmake ..`, configure CMake with:
+
+```bash
+cmake .. \
+    -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake" \
+    -DANDROID_PLATFORM=android-26 \
+    -DANDROID_ABI="arm64-v8a" 
+```

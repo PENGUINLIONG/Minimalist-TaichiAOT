@@ -17,9 +17,7 @@ int main(int argc, const char** argv) {
   g_run.launch();
   runtime.wait();
 
-  std::vector<float> arr_data(WIDTH * HEIGHT);
-  arr.read(arr_data);
-
+  auto arr_data = (const float*)arr.map();
   for (uint32_t y = 0; y < HEIGHT; ++y) {
     for (uint32_t x = 0; x < WIDTH; ++x) {
       float value = arr_data[y * WIDTH + x];
@@ -27,6 +25,7 @@ int main(int argc, const char** argv) {
     }
     std::cout << std::endl;
   }
+  arr.unmap();
 
   return 0;
 }
