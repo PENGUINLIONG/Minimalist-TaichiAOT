@@ -1,6 +1,6 @@
 # You should generate AOT module yourself.
 module/*
-!module/.gitignore
+!module/.gitkeep
 
 .vs
 .idea
