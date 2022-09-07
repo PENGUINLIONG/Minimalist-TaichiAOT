@@ -24,6 +24,5 @@ target_include_directories(${TAICHI_AOT_APP_NAME} PUBLIC ${TAICHI_C_API_INSTALL_
 target_link_libraries(${TAICHI_AOT_APP_NAME} ${taichi_c_api})
 
 # Copy Taichi C-API dynamic library to build artifact directory.
-file(GLOB taichi_c_api_SRC "${TAICHI_C_API_INSTALL_DIR}/bin/taichi_c_api.*")
-string(REPLACE "${TAICHI_C_API_INSTALL_DIR}/bin" "" taichi_c_api_DST ${taichi_c_api_SRC})
-add_custom_command(TARGET ${TAICHI_AOT_APP_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy ${taichi_c_api_SRC} $<TARGET_FILE_DIR:${TAICHI_AOT_APP_NAME}>/${taichi_c_api_DST})
+string(REPLACE "${TAICHI_C_API_INSTALL_DIR}/bin" "" taichi_c_api_DST ${taichi_c_api})
+add_custom_command(TARGET ${TAICHI_AOT_APP_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy ${taichi_c_api} $<TARGET_FILE_DIR:${TAICHI_AOT_APP_NAME}>/${taichi_c_api_DST})
