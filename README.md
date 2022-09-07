@@ -41,3 +41,5 @@ cmake .. \
     -DANDROID_PLATFORM=android-26 \
     -DANDROID_ABI="arm64-v8a" 
 ```
+
+You can use `scripts/run-android.sh` for convenience.

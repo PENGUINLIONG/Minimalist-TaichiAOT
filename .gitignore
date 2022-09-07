@@ -7,6 +7,6 @@ module/*
 .vscode
 tmp
 out
-build
+build*
 bin
 *.log
