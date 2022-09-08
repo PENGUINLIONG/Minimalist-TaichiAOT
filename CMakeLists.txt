@@ -53,3 +53,13 @@ else()
         ARGS -E copy ${taichi_c_api_SRC} $<TARGET_FILE_DIR:${TAICHI_AOT_APP_NAME}>/${taichi_c_api_DST}
         VERBATIM)
 endif()
+
+if (APPLE)
+    find_library(MoltenVK libMoltenVK.dylib PATHS $HOMEBREW_CELLAR/molten-vk $VULKAN_SDK REQUIRED)
+    add_custom_command(
+        TARGET ${TAICHI_AOT_APP_NAME}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+        ARGS -E copy ${MoltenVK} $<TARGET_FILE_DIR:${TAICHI_AOT_APP_NAME}>/libMoltenVK.dylib
+        VERBATIM)
+endif()

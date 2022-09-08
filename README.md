@@ -14,19 +14,30 @@ You might be interested in the following files.
 
 ## Build for Whatever
 
-1. Setup environment variables:
+### 1. Setup environment variables:
 
-|Key|Value|
+|Environment Variable|Description|
 |-|-|
+|`TAICHI_REPO_DIR`|Taichi source directory; the directory created by your `git clone` command.|
 |`TAICHI_C_API_INSTALL_DIR`|CMake install directory. Something like `/path/to/taichi/_skbuild/win-amd64-3.9/cmake-install/c_api`.|
+|`ANDROID_NDK_ROOT`|**(Optional)** Required for an Android build. Android NDK root directory. Something like `/Users/xxx/Library/Android/sdk/ndk/21.4.7075529`. |
 
-2. Generate AOT module with:
+### 2. Build the Taichi Runtime C-API library:
+
+|Build Script|Description|
+|-|-|
+|`scripts/build-taichi-macos.sh`|Build Taichi Runtime for macOS. Vulkan backend is enabled.|
+|`scripts/build-taichi-android.sh`|Build Taichi Runtime for Android on a *nix host. Vulkan backend is enabled.|
+
+Note that the Python binding is striped to save you from linking issues.
+
+### 3. Generate AOT module with:
 
 ```bash
 python app.py
 ```
 
-3. Build this repo with:
+### 4. Build this repo with:
 
 ```bash
 mkdir build
@@ -35,13 +46,9 @@ cmake ..
 cmake --build .
 ```
 
-If you are using Android NDK, instead of `cmake ..`, configure CMake with:
+Or call the build scripts directly:
 
-```bash
-cmake .. \
-    -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake" \
-    -DANDROID_PLATFORM=android-26 \
-    -DANDROID_ABI="arm64-v8a" 
-```
-
-You can use `scripts/run-android.sh` for convenience.
+|Build Script|Description|
+|-|-|
+|`scripts/run-macos.sh`|Build and run `app.cpp` on macOS.|
+|`scripts/run-android.sh`|Build and run `app.cpp` on the attached Android device via ADB.|
