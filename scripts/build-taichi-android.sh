@@ -1,6 +1,23 @@
 #!/bin/bash
+set -e
+
 CLANG_EXECUTABLE=$(find $ANDROID_NDK_ROOT -name "clang++")
 
+if [[ -z "${TAICHI_REPO_DIR}" ]]; then
+    echo "Please set TAICHI_REPO_DIR env variable"
+    exit
+else
+    echo "TAICHI_REPO_DIR is set to ${TAICHI_REPO_DIR}"
+fi
+
+if [[ -z "${ANDROID_NDK_ROOT}" ]]; then
+    echo "Please set ANDROID_NDK_ROOT env variable"
+    exit
+else
+    echo "ANDROID_NDK_ROOT is set to ${ANDROID_NDK_ROOT}"
+fi
+
+rm -rf build-taichi-android-aarch64
 mkdir build-taichi-android-aarch64
 pushd build-taichi-android-aarch64
 cmake $TAICHI_REPO_DIR \

@@ -1,6 +1,15 @@
 #!/bin/bash
+set -e
 CLANG_EXECUTABLE="$(brew list llvm@11 | grep clang++ | head -1)"
 
+if [[ -z "${TAICHI_REPO_DIR}" ]]; then
+    echo "Please set TAICHI_REPO_DIR env variable"
+    exit
+else
+    echo "TAICHI_REPO_DIR is set to ${TAICHI_REPO_DIR}"
+fi
+
+rm -rf build-taichi-macos
 mkdir build-taichi-macos
 pushd build-taichi-macos
 cmake $TAICHI_REPO_DIR \
