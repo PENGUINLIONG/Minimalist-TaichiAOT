@@ -4,4 +4,4 @@ cmake ..
 cmake --build .
 popd
 
-TI_LIB_DIR=./build-taichi-macos ./build-macos/TaichiAot
+TI_LIB_DIR=./build-macos ./build-macos/TaichiAot
