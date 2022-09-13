@@ -21,6 +21,12 @@ if [ $? -ne 0 ]; then
 fi
 popd
 
+if [[ ! -f "./module/metadata.tcb" ]]; then
+    echo "Did you run python app.py --arch=vulkan?"
+    exit -1
+fi
+
+adb shell rm -rf /data/local/tmp/taichi-aot/
 adb shell mkdir /data/local/tmp/taichi-aot/
 adb push ./build-android-aarch64/TaichiAot /data/local/tmp/taichi-aot/
 adb push ./build-android-aarch64/libtaichi_c_api.so /data/local/tmp/taichi-aot/

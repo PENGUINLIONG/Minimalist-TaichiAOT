@@ -8,4 +8,9 @@ cmake ..
 cmake --build .
 popd
 
+if [[ ! -f "./module/metadata.tcb" ]]; then
+    echo "Did you run python app.py --arch=vulkan?"
+    exit -1
+fi
+
 TI_LIB_DIR=./build-macos ./build-macos/TaichiAot
