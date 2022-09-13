@@ -1,4 +1,7 @@
 #!/bin/bash
+set -e
+
+rm -rf build-macos
 mkdir build-macos
 pushd build-macos
 cmake ..
