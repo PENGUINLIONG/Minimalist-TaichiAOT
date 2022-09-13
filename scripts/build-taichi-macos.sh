@@ -1,3 +1,4 @@
+#!/bin/bash
 CLANG_EXECUTABLE="$(brew list llvm@11 | grep clang++ | head -1)"
 
 mkdir build-taichi-macos

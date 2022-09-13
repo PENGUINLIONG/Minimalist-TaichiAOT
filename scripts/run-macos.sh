@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir build-macos
 pushd build-macos
 cmake ..

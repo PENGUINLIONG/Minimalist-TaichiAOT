@@ -1,3 +1,4 @@
+#!/bin/bash
 CLANG_EXECUTABLE=$(find $ANDROID_NDK_ROOT -name "clang++")
 
 mkdir build-taichi-android-aarch64

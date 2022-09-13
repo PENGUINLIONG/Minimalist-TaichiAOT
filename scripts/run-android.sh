@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir build-android-aarch64
 pushd build-android-aarch64
 TAICHI_C_API_INSTALL_DIR="${PWD}/../build-taichi-android-aarch64/install/c_api" cmake .. \
