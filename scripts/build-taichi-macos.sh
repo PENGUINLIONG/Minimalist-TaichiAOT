@@ -13,6 +13,7 @@ rm -rf build-taichi-macos
 mkdir build-taichi-macos
 pushd build-taichi-macos
 cmake $TAICHI_REPO_DIR \
+    -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
     -DCMAKE_INSTALL_PREFIX="./install" \
     -DCLANG_EXECUTABLE=$CLANG_EXECUTABLE \
     -G "Ninja" \
