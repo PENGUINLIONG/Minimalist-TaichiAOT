@@ -54,6 +54,10 @@ else()
         VERBATIM)
 endif()
 
+# MoltenVK dylib should be copied to the output directory, otherwise Taichi
+# complains that it couldn't find `TI_LIB_DIR`. You should specify the
+# environment directory`TI_LIB_DIR` launching on an Apple OS. Please refer to
+# `scripts\run-macos.sh` for detail.
 if (APPLE)
     find_library(MoltenVK libMoltenVK.dylib PATHS $HOMEBREW_CELLAR/molten-vk $VULKAN_SDK REQUIRED)
     add_custom_command(
