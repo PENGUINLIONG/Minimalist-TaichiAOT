@@ -1,44 +1,42 @@
-import argparse
-
 import taichi as ti
+import numpy as np
 
-WIDTH = 16
-HEIGHT = 16
+ti.init(arch=ti.vulkan)
 
-def compile_graph_aot(arch):
-    ti.init(arch=arch)
-
-    if ti.lang.impl.current_cfg().arch != arch:
-        return
-
-    @ti.kernel
-    def chess_board(arr: ti.types.ndarray(field_dim=2)):
-        for i, j in arr:
-            value = ti.cast((j * (WIDTH + 1) + i) % 2, ti.f32)
-            arr[i, j] = value
+n = 32
+canvas = ti.ndarray(dtype=ti.f32, shape=(n * 2, n))
 
 
-    _arr = ti.graph.Arg(ti.graph.ArgKind.NDARRAY,
-                        'arr',
-                        ti.f32,
-                        field_dim=2,
-                        element_shape=())
-
-    g_builder = ti.graph.GraphBuilder()
-    g_builder.dispatch(chess_board, _arr)
-    run_graph = g_builder.compile()
-
-    mod = ti.aot.Module(arch)
-    mod.add_graph('g_run', run_graph)
-    mod.save("module", '')
+@ti.func
+def complex_sqr(z):
+    return ti.Vector([z[0]**2 - z[1]**2, z[1] * z[0] * 2])
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--arch", type=str)
-    args = parser.parse_args()
+@ti.kernel
+def fractal(t: ti.f32, canvas: ti.types.ndarray(field_dim=2)):
+    for i, j in canvas:  # Parallelized over all pixels
+        c = ti.Vector([-0.8, ti.cos(t) * 0.2])
+        z = ti.Vector([i / n - 1, j / n - 0.5]) * 2
+        iterations = 0
+        while z.norm() < 20 and iterations < 50:
+            z = complex_sqr(z) + c
+            iterations += 1
+        canvas[i, j] = 1 - iterations * 0.02
 
-    if args.arch == "vulkan":
-        compile_graph_aot(arch=ti.vulkan)
-    else:
-        assert False
+sym_t = ti.graph.Arg(ti.graph.ArgKind.SCALAR,
+                     "t",
+                     ti.f32,
+                     element_shape=())
+sym_canvas = ti.graph.Arg(ti.graph.ArgKind.NDARRAY,
+                          "canvas",
+                          ti.f32,
+                          field_dim=2,
+                          element_shape=())
+
+gb = ti.graph.GraphBuilder()
+gb.dispatch(fractal, sym_t, sym_canvas)
+graph = gb.compile()
+
+mod = ti.aot.Module(ti.vulkan)
+mod.add_graph('fractal', graph)
+mod.save("module", "")
