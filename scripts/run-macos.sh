@@ -10,7 +10,7 @@ cmake --build .
 popd
 
 if [[ ! -f "./module/metadata.tcb" ]]; then
-    echo "Did you run python app.py --arch=vulkan?"
+    echo "Did you generated AOT module?"
     exit -1
 fi
 
