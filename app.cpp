@@ -1,16 +1,28 @@
 #include <cstdio>
 #include <utility>
 #include <string>
-#include <vulkan/vulkan.h>
-#include "taichi/taichi_core.h"
-#include "taichi/taichi_vulkan.h"
+#define TI_WITH_VULKAN
+#define VK_NO_PROTOTYPES 1
+#include "taichi/taichi.h"
 
 #define MAP_MEMORY 1;
+
+#define PER_VULKAN_API(x) PFN_##x x##_;
+PER_VULKAN_API(vkCreateBuffer);
+PER_VULKAN_API(vkGetPhysicalDeviceMemoryProperties);
+PER_VULKAN_API(vkGetBufferMemoryRequirements);
+PER_VULKAN_API(vkAllocateMemory);
+PER_VULKAN_API(vkMapMemory);
+PER_VULKAN_API(vkUnmapMemory);
+PER_VULKAN_API(vkBindBufferMemory);
+PER_VULKAN_API(vkDestroyBuffer);
+PER_VULKAN_API(vkFreeMemory);
+#undef PER_VULKAN_API
 
 static int FindMemoryByFlagAndTypeNew(VkMemoryPropertyFlagBits memoryFlagBits, uint32_t  memoryTypeBits, VkPhysicalDevice physicalDevice)
 {
 	VkPhysicalDeviceMemoryProperties	vpdmp;
-	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &vpdmp);
+	vkGetPhysicalDeviceMemoryProperties_(physicalDevice, &vpdmp);
 	for (unsigned int i = 0; i < vpdmp.memoryTypeCount; i++)
 	{
 		VkMemoryType vmt = vpdmp.memoryTypes[i];
@@ -75,8 +87,20 @@ int main()
   bufferInfo.queueFamilyIndexCount = 0;
   bufferInfo.pQueueFamilyIndices = nullptr;
 
+#define PER_VULKAN_API(x) x##_ = (PFN_##x)export_runtime_info.get_instance_proc_addr(export_runtime_info.instance, #x);
+PER_VULKAN_API(vkCreateBuffer);
+PER_VULKAN_API(vkGetPhysicalDeviceMemoryProperties);
+PER_VULKAN_API(vkGetBufferMemoryRequirements);
+PER_VULKAN_API(vkAllocateMemory);
+PER_VULKAN_API(vkMapMemory);
+PER_VULKAN_API(vkUnmapMemory);
+PER_VULKAN_API(vkBindBufferMemory);
+PER_VULKAN_API(vkDestroyBuffer);
+PER_VULKAN_API(vkFreeMemory);
+#undef PER_VULKAN_API
+
+
   VkBuffer bufferIn;
-  PFN_vkCreateBuffer vkCreateBuffer_ = (PFN_vkCreateBuffer)export_runtime_info.get_instance_proc_addr(export_runtime_info.instance, "vkCreateBuffer");
   VkResult res = vkCreateBuffer_(device, &bufferInfo, nullptr, &bufferIn);
   if (res != VK_SUCCESS) {
     printf("vkCreateBuffer failed! res = %d \n", res);
@@ -84,7 +108,7 @@ int main()
   }
 
   VkMemoryRequirements memRequirements;
-  vkGetBufferMemoryRequirements(device, bufferIn, &memRequirements);
+  vkGetBufferMemoryRequirements_(device, bufferIn, &memRequirements);
   uint32_t  memoryTypeIndex;
   memoryTypeIndex = FindMemoryByFlagAndTypeNew(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, memRequirements.memoryTypeBits, export_runtime_info.physical_device);
   printf("memoryTypeIndex = %d \n", memoryTypeIndex);
@@ -96,7 +120,7 @@ int main()
   allocInfo.allocationSize = memRequirements.size;
   allocInfo.memoryTypeIndex = memoryTypeIndex;
   VkDeviceMemory vkmemoryIn;
-  res = vkAllocateMemory(device, &allocInfo, nullptr, &vkmemoryIn);
+  res = vkAllocateMemory_(device, &allocInfo, nullptr, &vkmemoryIn);
   if (res != VK_SUCCESS) {
     printf("vkAllocateMemory failed! res = %d \n", res);
     return -1;
@@ -104,15 +128,15 @@ int main()
 
   //map memory
   float* payload;
-  vkMapMemory(device, vkmemoryIn, 0, byte_size, 0, (void**)&payload);
+  vkMapMemory_(device, vkmemoryIn, 0, byte_size, 0, (void**)&payload);
   for (int i = 0; i < width * height * ch; ++i) {
     payload[i] = i % 256;
   }
-  vkUnmapMemory(device, vkmemoryIn);
+  vkUnmapMemory_(device, vkmemoryIn);
   ti_wait(runtime);
 
   // bind memory 
-  res = vkBindBufferMemory(device, bufferIn, vkmemoryIn, 0);
+  res = vkBindBufferMemory_(device, bufferIn, vkmemoryIn, 0);
   if (res != VK_SUCCESS) {
     printf("vkBindBufferMemory input failed! res = %d \n", res);
     return -1;
@@ -122,28 +146,28 @@ int main()
   }
 
   //debug
-  vkMapMemory(device, vkmemoryIn, 0, byte_size, 0, (void**)&payload);
+  vkMapMemory_(device, vkmemoryIn, 0, byte_size, 0, (void**)&payload);
   for (int i = 0; i < 16; ++i) {
     printf("input val = %f \n", payload[i]);
   }
-  vkUnmapMemory(device, vkmemoryIn);
+  vkUnmapMemory_(device, vkmemoryIn);
   ti_wait(runtime);
 
   //create buffer output
   VkBuffer bufferOut;
-  res = vkCreateBuffer(device, &bufferInfo, nullptr, &bufferOut);
+  res = vkCreateBuffer_(device, &bufferInfo, nullptr, &bufferOut);
   if (res != VK_SUCCESS) {
     printf("vkCreateBuffer failed! res = %d \n", res);
     return -1;
   }
 
   VkDeviceMemory vkmemoryOut;
-  res = vkAllocateMemory(device, &allocInfo, nullptr, &vkmemoryOut);
+  res = vkAllocateMemory_(device, &allocInfo, nullptr, &vkmemoryOut);
   if (res != VK_SUCCESS) {
     printf("vkAllocateMemory failed! res = %d \n", res);
     return -1;
   }
-  res = vkBindBufferMemory(device, bufferOut, vkmemoryOut, 0);
+  res = vkBindBufferMemory_(device, bufferOut, vkmemoryOut, 0);
   if (res != VK_SUCCESS) {
     printf("vkBindBufferMemory output failed! res = %d \n", res);
     return -1;
@@ -222,16 +246,16 @@ int main()
   printf("01 vkmemoryOut = %p \n", vkmemoryOut);
 
   //map memory
-  vkMapMemory(device, vkmemoryOut, 0, byte_size, 0, (void**)&payload);
+  vkMapMemory_(device, vkmemoryOut, 0, byte_size, 0, (void**)&payload);
   for (int i = 0; i < 16; ++i) {
     printf("i = %d dst val = %f \n", i, payload[i]);
   }
-  vkUnmapMemory(device, vkmemoryOut);
+  vkUnmapMemory_(device, vkmemoryOut);
 
-  vkDestroyBuffer(device, bufferIn, nullptr);
-  vkDestroyBuffer(device, bufferOut, nullptr);
-  vkFreeMemory(device, vkmemoryIn, nullptr);
-  vkFreeMemory(device, vkmemoryOut, nullptr);
+  vkDestroyBuffer_(device, bufferIn, nullptr);
+  vkDestroyBuffer_(device, bufferOut, nullptr);
+  vkFreeMemory_(device, vkmemoryIn, nullptr);
+  vkFreeMemory_(device, vkmemoryOut, nullptr);
 
   ti_free_memory(runtime, in_ten_mem);
   ti_free_memory(runtime, out_ten_mem);
