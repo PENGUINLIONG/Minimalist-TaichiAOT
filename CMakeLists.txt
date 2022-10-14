@@ -15,6 +15,11 @@ message("-- TAICHI_C_API_INSTALL_DIR=" ${TAICHI_C_API_INSTALL_DIR})
 add_executable(${TAICHI_AOT_APP_NAME} app.cpp)
 target_include_directories(${TAICHI_AOT_APP_NAME} PUBLIC ${TAICHI_C_API_INSTALL_DIR}/include)
 
+find_package(Vulkan REQUIRED)
+
+target_include_directories(${TAICHI_AOT_APP_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
+target_link_libraries(${TAICHI_AOT_APP_NAME} PUBLIC ${Vulkan_LIBRARY})
+
 # Find built taichi C-API library in `TAICHI_C_API_INSTALL_DIR`.
 find_library(taichi_c_api taichi_c_api HINTS
     ${TAICHI_C_API_INSTALL_DIR}/lib
@@ -23,7 +28,7 @@ find_library(taichi_c_api taichi_c_api HINTS
 if (NOT EXISTS ${taichi_c_api})
     message(FATAL_ERROR "Couldn't find C-API library; ensure your Taichi is built with `TI_WITH_CAPI=ON`")
 else()
-    target_link_libraries(${TAICHI_AOT_APP_NAME} ${taichi_c_api})
+    target_link_libraries(${TAICHI_AOT_APP_NAME} PUBLIC ${taichi_c_api})
 endif()
 
 # If you are building for Android, you need to link to system libraries.

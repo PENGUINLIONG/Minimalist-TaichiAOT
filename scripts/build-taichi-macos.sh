@@ -19,6 +19,7 @@ cmake $TAICHI_REPO_DIR \
     -G "Ninja" \
     -DTI_WITH_C_API=ON \
     -DTI_WITH_VULKAN=ON \
+    -DTI_WITH_OPENGL=ON \
     -DTI_WITH_CPU=OFF \
     -DTI_WITH_LLVM=OFF \
     -DTI_WITH_CUDA=OFF \
