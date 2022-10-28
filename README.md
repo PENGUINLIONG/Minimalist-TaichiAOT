@@ -27,6 +27,8 @@ You might be interested in the following files.
 |Build Script|Description|
 |-|-|
 |`scripts/build-taichi-macos.sh`|Build Taichi Runtime for macOS. Vulkan backend is enabled.|
+|`scripts/build-taichi-linux.sh`|Build Taichi Runtime for Linux distros. Vulkan backend is enabled.|
+|`scripts/build-taichi-windows.ps1`|Build Taichi Runtime for Windows. Vulkan backend is enabled.|
 |`scripts/build-taichi-android.sh`|Build Taichi Runtime for Android on a *nix host. Vulkan backend is enabled.|
 
 Note that the Python binding is striped to save you from linking issues.
@@ -51,4 +53,6 @@ Or call the build scripts directly:
 |Build Script|Description|
 |-|-|
 |`scripts/run-macos.sh`|Build and run `app.cpp` on macOS.|
+|`scripts/run-linux.sh`|Build and run `app.cpp` on Linux distros.|
+|`scripts/run-windows.ps1`|Build and run `app.cpp` on Windows.|
 |`scripts/run-android.sh`|Build and run `app.cpp` on the attached Android device via ADB.|
