@@ -5,7 +5,8 @@ rm -rf build-macos
 mkdir build-macos
 pushd build-macos
 TAICHI_C_API_INSTALL_DIR="${PWD}/../build-taichi-macos/install/c_api" cmake .. \
-    -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_OSX_ARCHITECTURES="arm64"
 cmake --build .
 popd
 

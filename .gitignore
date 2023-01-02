@@ -10,3 +10,4 @@ out
 build*
 bin
 *.log
+.DS_Store
