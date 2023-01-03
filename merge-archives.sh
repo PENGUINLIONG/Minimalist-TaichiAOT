@@ -315,4 +315,5 @@ ar cru libtaichi_c_api_internal.a \
   build-taichi-ios-arm64/taichi.build/Debug-iphoneos/taichi_core.build/Objects-normal/arm64/make_mesh_thread_local.o \
   build-taichi-ios-arm64/taichi.build/Debug-iphoneos/taichi_core.build/Objects-normal/arm64/gather_deactivations.o
 libtool -static -o build-taichi-ios-arm64/install/c_api/lib/libtaichi_c_api.a libtaichi_c_api_internal.a /Users/penguinliong/Library/Developer/Xcode/DerivedData/MoltenVK-gzvhtkjichuwfkckzndbkobvsjbr/Build/Products/Release-iphoneos/libMoltenVK.a
+strip build-taichi-ios-arm64/install/c_api/lib/libtaichi_c_api.a
 rm libtaichi_c_api_internal.a
