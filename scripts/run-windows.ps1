@@ -10,7 +10,7 @@ if (-not (Test-Path "build-windows")) {
 }
 
 Push-Location "build-windows"
-& cmake .. -DCMAKE_BUILD_TYPE=$BuildType
+& cmake .. -DCMAKE_BUILD_TYPE="$BuildType"
 & cmake --build .
 Pop-Location
 
