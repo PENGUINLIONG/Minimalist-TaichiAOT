@@ -5,8 +5,10 @@ module/*
 .vs
 .idea
 .vscode
+.cache*
 tmp
 out
 build*
 bin
 *.log
+.DS_Store

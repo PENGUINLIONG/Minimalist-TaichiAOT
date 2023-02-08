@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-CLANG_EXECUTABLE="$(brew list llvm@11 | grep clang++ | head -1)"
+CLANG_EXECUTABLE="$(brew list llvm@15 | grep clang++ | head -1)"
 
 if [[ -z "${TAICHI_REPO_DIR}" ]]; then
     echo "Please set TAICHI_REPO_DIR env variable"
@@ -18,8 +18,8 @@ cmake $TAICHI_REPO_DIR \
     -DCLANG_EXECUTABLE=$CLANG_EXECUTABLE \
     -G "Ninja" \
     -DTI_WITH_C_API=ON \
-    -DTI_WITH_VULKAN=ON \
-    -DTI_WITH_CPU=OFF \
+    -DTI_WITH_VULKAN=OFF \
+    -DTI_WITH_METAL=ON \
     -DTI_WITH_LLVM=OFF \
     -DTI_WITH_CUDA=OFF \
     -DTI_WITH_PYTHON=OFF \
