@@ -16,8 +16,8 @@ if [[ ! -f "tmp/ios.toolchain.cmake" ]]; then
     curl https://raw.githubusercontent.com/leetal/ios-cmake/master/ios.toolchain.cmake -o tmp/ios.toolchain.cmake
 fi
 
-#rm -rf build-taichi-ios-arm64
-#mkdir build-taichi-ios-arm64
+rm -rf build-taichi-ios-arm64
+mkdir build-taichi-ios-arm64
 pushd build-taichi-ios-arm64
 # See https://stackoverflow.com/questions/12630970/compiling-for-ios-with-cmake
 cmake $TAICHI_REPO_DIR \
