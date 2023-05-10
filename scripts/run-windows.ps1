@@ -14,4 +14,5 @@ Push-Location "build-windows"
 & cmake --build .
 Pop-Location
 
+Copy-Item build-taichi-windows/$BuildType/taichi_c_api.dll build-windows/$BuildType/taichi_c_api.dll -Force
 & build-windows/$BuildType/TaichiAot.exe

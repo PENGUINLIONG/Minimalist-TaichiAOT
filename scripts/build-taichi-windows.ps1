@@ -9,7 +9,7 @@ if (-not (Test-Path "build-taichi-windows")) {
     New-Item "build-taichi-windows" -ItemType Directory
 }
 
-$CLANG_EXECUTABLE = "$env:TAICHI_REPO_DIR/tmp\taichi-clang\bin\clang++.exe"
+$CLANG_EXECUTABLE = "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/bin/clang.exe"
 
 Push-Location "build-taichi-windows"
 & cmake "$env:TAICHI_REPO_DIR" `
@@ -21,6 +21,5 @@ Push-Location "build-taichi-windows"
     -DTI_WITH_CUDA=OFF `
     -DTI_WITH_PYTHON=OFF `
     -DTI_WITH_CC=OFF
-& cmake --build . -t taichi_c_api
 & cmake --build . -t install
 Pop-Location
